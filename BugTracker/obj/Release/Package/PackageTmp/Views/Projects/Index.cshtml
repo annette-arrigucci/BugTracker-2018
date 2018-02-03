@@ -1,0 +1,67 @@
+﻿@model IEnumerable<BugTracker.Models.Project>
+
+@{
+    ViewBag.Title = "Index";
+}
+
+<link rel="stylesheet" href="~/Content/index-style.css" />
+<div class="row">
+    <h1 class="col-lg-4">My Projects</h1>
+</div>
+<div>
+    <hr />
+    <p>
+        @if (User.IsInRole("Admin") || User.IsInRole("Project Manager"))
+        {
+            <h4>@Html.ActionLink("Create New", "Create")</h4>
+        }
+    </p>
+    <br />
+    <table class="table table-striped table-hover">
+        <thead>
+            <tr>
+                <th>
+                    @Html.DisplayNameFor(model => model.Name)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Description)
+                </th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Name)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Description)
+                    </td>
+                    <td>
+                        @Html.ActionLink("Details", "Details", new { id = item.Id })
+                        @if (User.IsInRole("Admin") || User.IsInRole("Project Manager"))
+                        {
+                            @Html.Raw(" | ")
+                            @Html.ActionLink("Edit", "Edit", new { id = item.Id })
+                            @Html.Raw(" | ")
+                            @Html.ActionLink("Assign Users", "Edit", "ProjectUserView", new { projectId = item.Id }, new { })
+                            @Html.Raw(" | ")
+                            @Html.ActionLink("Archive", "Archive", new { id = item.Id }, new { })
+                        }
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+    <p>
+        @if (User.IsInRole("Admin"))
+        {
+            @Html.ActionLink("Manage User Roles", "Index", "AdminUserView", null, null)
+        }
+    </p>
+    <p>
+        @Html.ActionLink("View Archived Projects", "ArchivedProjects", "Projects", null, null)
+    </p>
+</div>

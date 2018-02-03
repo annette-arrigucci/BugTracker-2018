@@ -1,0 +1,167 @@
+﻿<!DOCTYPE html>
+<html>
+
+@model BugTracker.Models.LoginViewModel
+@{
+    ViewBag.Title = "Log in";
+    Layout = null;
+}
+
+
+
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bug Tracker</title>
+    <link href="~/Content/login-style.css" rel="stylesheet">
+    @Styles.Render("~/Content/sitestyle")
+    @Scripts.Render("~/bundles/modernizr")
+</head>
+
+<body>
+    <div class="container">
+        <div class="row">
+
+            <div id="big-title" class="col-md-5">
+                <h1>Bug Tracker</h1>
+                <h2>A complete solution to track errors in software</h2>
+                <h4>
+                    @Html.ActionLink("Read more about Bug Tracker", "About", "Home")
+                </h4>
+
+
+                <div id="plug-portfolio" class="jumbotron">
+                    <h4>A project by Annette Arrigucci for Coder Foundry<br /><a href="http://annette-arrigucci.azurewebsites.net" target="_blank">View full portfolio</a></h4>
+                    
+                </div>
+            </div>
+
+
+            <div id="sign-in" class="col-md-6">
+                <div class="row" id="demo">
+                    <h2>Live demos</h2>
+                    <div id="demo-buttons">
+                        <div class="row">
+                            <div class="col-md-6">
+                                @using (Html.BeginForm("DemoLogin", "Account", new { userType = "Submitter", returnUrl = ViewBag.ReturnUrl }, FormMethod.Post, null))
+                                {
+                                    @Html.AntiForgeryToken()
+
+                                    @*<input class="form-control" data-val="true" data-val-email="The Email field is not a valid e-mail address." data-val-required="The Email field is required." id="SubmitterEmail" name="Email" type="hidden" value="annette_c_a@yahoo.com" />
+                                    <input class="form-control" data-val="true" data-val-required="The Password field is required." id="SubmitterPassword" name="Password" type="hidden" value="Abc&1234!" />*@
+
+                                    <input type="submit" value="Submitter" class="btn btn-default btn-demo" />
+
+                                }
+                            </div>
+                            <div class="col-md-6">
+                            @using (Html.BeginForm("DemoLogin", "Account", new { userType = "Developer", returnUrl = ViewBag.ReturnUrl }, FormMethod.Post, null))
+                             {
+                                    @Html.AntiForgeryToken()
+
+                                    @*<input class="form-control" data-val="true" data-val-email="The Email field is not a valid e-mail address." data-val-required="The Email field is required." id="DeveloperEmail" name="Email" type="hidden" value="johnfrancis@mailinator.com" />
+                                    <input class="form-control" data-val="true" data-val-required="The Password field is required." id="DeveloperPassword" name="Password" type="hidden" value="Abc&123!" />*@
+
+                                    <input type="submit" value="Developer" class="btn btn-default btn-demo" />
+
+                                }
+                            </div>
+                        </div>
+
+
+                        <div class="row">
+                            <div class="col-md-6">
+                            @using (Html.BeginForm("DemoLogin", "Account", new { userType = "Project Manager", returnUrl = ViewBag.ReturnUrl }, FormMethod.Post, null))
+                                {
+                                    @Html.AntiForgeryToken()
+
+                                    @*<input data-val="true" data-val-email="The Email field is not a valid e-mail address." data-val-required="The Email field is required." id="ProjectManagerEmail" name="Email" type="hidden" value="epalmer@coderfoundry.com" />
+                                    <input data-val="true" data-val-required="The Password field is required." id="ProjectManagerPassword" name="Password" type="hidden" value="Abc&123!" />*@
+                                    <input type="submit" value="Project Manager" class="btn btn-default btn-demo" />
+                                }
+                            </div>
+                            <div class="col-md-6">
+                            @using (Html.BeginForm("DemoLogin", "Account", new { userType = "Admin", returnUrl = ViewBag.ReturnUrl }, FormMethod.Post, null))
+                                {
+                                    @Html.AntiForgeryToken()
+
+                                    @*<input data-val="true" data-val-email="The Email field is not a valid e-mail address." data-val-required="The Email field is required." id="AdminEmail" name="Email" type="hidden" value="bdavis@coderfoundry.com" />
+                                    <input data-val="true" data-val-required="The Password field is required." id="AdminPassword" name="Password" type="hidden" value="Abc&123!" />*@
+                                    <input type="submit" value="Admin" class="btn btn-default btn-demo" />
+
+                                }
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+
+
+                <div class="row" id="form-section">
+                    <h2>Sign in</h2>
+                    <section id="loginForm">
+                        @using (Html.BeginForm("Login", "Account", new { ReturnUrl = ViewBag.ReturnUrl }, FormMethod.Post, new { @class = "form-horizontal", role = "form" }))
+                        {
+                            @Html.AntiForgeryToken()
+                            @*<h4>Use a local account to log in.</h4>*@
+                            @*<hr />*@
+                            @*@Html.ValidationSummary(true, "", new { @class = "text-danger" })*@
+                            <div class="form-group">
+                                @Html.LabelFor(m => m.Email, new { @class = "col-md-2 control-label" })
+                                <div class="col-md-10">
+                                    @Html.TextBoxFor(m => m.Email, new { @class = "form-control" })
+                                    @*Can't use validation with demo logins*@
+                                    @*@Html.ValidationMessageFor(m => m.Email, "", new { @class = "text-danger" })*@
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                @Html.LabelFor(m => m.Password, new { @class = "col-md-2 control-label" })
+                                <div class="col-md-10">
+                                    @Html.PasswordFor(m => m.Password, new { @class = "form-control" })
+                                    @*@Html.ValidationMessageFor(m => m.Password, "", new { @class = "text-danger" })*@
+                                </div>
+                            </div>
+                            @*<div class="form-group">
+                                    <div class="col-md-offset-2 col-md-10">
+                                        <div class="checkbox">
+                                            @Html.CheckBoxFor(m => m.RememberMe)
+                                            @Html.LabelFor(m => m.RememberMe)
+                                        </div>
+                                    </div>
+                                </div>*@
+
+                            <div class="form-group">
+                                <div class="col-md-offset-2 col-md-10">
+                                    <input type="submit" value="Log in" class="btn btn-default" />
+                                </div>
+                            </div>
+                            <p>
+                                @Html.ActionLink("Register as a new user", "Register")
+                            </p>
+                            @*Enable this once you have account confirmation enabled for password reset functionality*@
+                            <p>
+                                @Html.ActionLink("Forgot your password?", "ForgotPassword")
+                            </p>
+                        }
+                    </section>
+                </div>
+                @*<div class="col-md-4">
+                        <section id="socialLoginForm">
+                            @Html.Partial("_ExternalLoginsListPartial", new ExternalLoginListViewModel { ReturnUrl = ViewBag.ReturnUrl })
+                        </section>
+                    </div>*@
+            </div>
+        </div>
+    </div>
+    @*@section Scripts {
+        @Scripts.Render("~/bundles/jqueryval")
+    }*@
+    <footer></footer>
+
+    @Scripts.Render("~/bundles/jquery")
+    @Scripts.Render("~/bundles/bootstrap")
+    <script src="@Url.Content("~/Scripts/jquery.validate.js")" type="text/javascript"></script>
+    <script src="@Url.Content("~/Scripts/jquery.validate.unobtrusive.js")" type="text/javascript"></script>
+    @*@RenderSection("scripts", required: false)*@
+</body>
+</html>

@@ -1,0 +1,39 @@
+﻿@model IEnumerable<BugTracker.Models.TicketAttachment>
+
+@using BugTracker.Models;
+
+@if (Model != null && Model.Any())
+{
+    foreach (var item in Model)
+    {
+        if (!string.IsNullOrEmpty(item.FileUrl) && !string.IsNullOrEmpty(item.FileName))
+        {
+            <a href="@item.FileUrl" target="_blank"><img src="~/fonts/attachment_icon.png" /></a>
+            <a href="@item.FileUrl" target="_blank">@item.FileName</a><br>
+        }
+        @Html.Raw(item.Description)
+        <br />
+        if (!string.IsNullOrEmpty(item.UserId))
+        {
+            //using the UserRolesHelper class to get the user's name
+            var helper = new UserRolesHelper();
+            var userName = helper.GetUserName(item.UserId);
+            <b>Added by @userName</b>
+        }
+        <br />
+            <b>@TimeZoneInfo.ConvertTime(item.Created, TimeZoneInfo.FindSystemTimeZoneById("Eastern Standard Time")).ToString("M/d/yy h:mm tt")</b>
+            <p>
+                @if (User.IsInRole("Admin"))
+                {
+                    @Html.ActionLink("Edit", "Edit", "TicketAttachments", new { id = item.Id }, null)
+                    @Html.Raw(" | ")
+                    @Html.ActionLink("Delete", "Delete", "TicketAttachments", new { id = item.Id }, null)
+                }
+            </p>
+    }
+}
+else
+{
+    @Html.Raw("No attachments<br>")
+}    
+    

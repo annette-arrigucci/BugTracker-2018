@@ -1,0 +1,43 @@
+﻿@model BugTracker.Models.Project
+
+@{
+    ViewBag.Title = "Delete";
+}
+
+<h2>Archive Project</h2>
+<div class="row">
+    <div class="col-lg-6">
+        <h3 class="alert alert-danger">Are you sure you want to archive this project?</h3>
+    </div>
+</div>
+<div>
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.Name)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.Name)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.Description)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.Description)
+        </dd>
+        <dt></dt>
+        <dd>
+            <br />
+            @using (Html.BeginForm("ArchiveConfirmed", "Projects", new { id = Model.Id }, FormMethod.Post))
+            {
+                @Html.AntiForgeryToken()
+
+                <div class="form-actions no-color">
+                    <input type="submit" value="Confirm Archive" class="btn btn-default" />
+                    <br />
+                    <br />
+                    @Html.ActionLink("Back to Projects", "Index")
+                </div>
+            }
+        </dd>
+    </dl>
+</div>

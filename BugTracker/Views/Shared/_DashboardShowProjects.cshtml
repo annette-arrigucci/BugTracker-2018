@@ -1,0 +1,20 @@
+﻿@model IEnumerable<BugTracker.Models.ProjectInfoViewModel>
+@using BugTracker.Models
+
+
+<h2>Projects</h2>    
+<div class="row">
+    @foreach (var item in Model)
+    {
+        <div class="col-sm-3 project-item">
+            <a href="@Url.Action("Details", "Projects", new { id = item.ProjectId })"><img src="~/fonts/project-icon.png" alt="project" /></a>
+            <br />
+            <div class="project-info">
+                <b>@Html.ActionLink(item.ProjectName, "Details", "Projects", new { id = item.ProjectId }, null)</b><br />
+                <span><b>Tickets:</b> @item.NumUserTicketsForProject</span><br />
+                <span><b>Critical:</b> @item.NumUserCriticalTickets</span><br />
+                <span><b>Resolved:</b> @item.NumUserResolvedTickets</span><br />
+            </div>
+        </div>
+    }
+</div>

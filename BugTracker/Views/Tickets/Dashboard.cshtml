@@ -1,0 +1,140 @@
+﻿@model IEnumerable<BugTracker.Models.TicketDetailsViewModel>
+@using BugTracker.Models
+@using Microsoft.AspNet.Identity;
+
+@{
+    ViewBag.Title = "Dashboard";
+}
+
+<link rel="stylesheet" href="~/Content/dashboard-style.css" />
+
+<div class="row">
+    <h1 class="col-lg-6">My Dashboard</h1>    
+</div>
+<div>
+    <hr />
+    @*This view shows the most important ticket information about the user's tickets -
+        go to "All" view for full ticket information in a table*@
+
+    <h2>Recently updated tickets</h2>
+
+    <table class="table table-striped table-hover ">
+        <thead>
+            <tr>
+                <th>
+                    Title
+                </th>
+
+                <th>
+                    Updated/Created
+                </th>
+
+                <th>
+                    Project
+                </th>
+
+                <th>
+                    Priority
+                </th>
+
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td>
+                        @Html.ActionLink(@item.Title, "Details", new { id = item.Id })
+                    </td>
+
+                    <td>
+                        @if (item.Updated != null)
+                        {
+                            @TimeZoneInfo.ConvertTime((DateTimeOffset)item.Updated, TimeZoneInfo.FindSystemTimeZoneById("Eastern Standard Time")).ToString("M/d/yy h:mm tt")
+                        }
+                        else
+                        {
+                            @TimeZoneInfo.ConvertTime(item.Created, TimeZoneInfo.FindSystemTimeZoneById("Eastern Standard Time")).ToString("M/d/yy h:mm tt")
+                        }
+                    </td>
+
+                    <td>
+                        @Html.DisplayFor(modelItem => item.ProjectTitle)
+                    </td>
+
+                    <td>
+                        @if (item.TicketPriority.Equals("Critical"))
+                        {
+                            <span class="label label-danger">Critical</span>
+                        }
+                        else if (item.TicketPriority.Equals("High"))
+                        {
+                            <span class="label label-warning">High</span>
+                        }
+                        else if (item.TicketPriority.Equals("Medium"))
+                        {
+                            <span class="label label-primary">Medium</span>
+                        }
+                        else if (item.TicketPriority.Equals("Low"))
+                        {
+                            <span class="label label-default">Low</span>
+                        }
+
+                    </td>
+
+
+                    <td>
+                        @Html.ActionLink("Details", "Details", new { id = item.Id })
+                        @Html.Raw(" | ")
+                        @Html.ActionLink("Edit", "Edit", new { id = item.Id })
+
+                        @if (User.IsInRole("Project Manager"))
+                        {
+                            @Html.Raw(" | ")
+                            @Html.ActionLink("Assign", "AssignUser", new { id = item.Id })
+                        }
+                        @*@Html.ActionLink("Delete", "Delete", new { id=item.Id })*@
+                    </td>
+                </tr>
+            }
+        </tbody>
+        <tfoot>
+        </tfoot>
+    </table>
+    <p>
+        <h4>@Html.ActionLink("View all tickets", "Index", "Tickets")</h4>
+    </p>
+
+
+    @{
+        var myHelper = new ProjectUserHelper();
+        var userId = User.Identity.GetUserId();
+        var projectList = new List<Project>();
+        if (!User.IsInRole("Admin"))
+        {
+            projectList = myHelper.ListUserProjects(userId);
+        }
+        //if user as an admin, return all projects
+        else
+        {
+            projectList = myHelper.GetAllProjects();
+        }
+        var projectInfoList = new List<ProjectInfoViewModel>();
+        foreach (var project in projectList)
+        {
+            //check if the project is an active project; if not don't include it on the dashboard
+            if (project.IsActive == true)
+            {
+                var projInfo = new ProjectInfoViewModel(userId, project.Id);
+                projectInfoList.Add(projInfo);
+            }
+        }
+    }
+    @Html.Partial("_DashboardShowProjects", projectInfoList)
+    <br />
+    <p>
+        <h4>@Html.ActionLink("View projects list", "Index", "Projects")</h4>
+    </p>
+    <br />
+</div>

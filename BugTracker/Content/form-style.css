@@ -1,0 +1,16 @@
+﻿.btn-default {
+    margin-top: 15px;
+}
+
+texarea {
+    width: 100% !important;
+}
+
+.not-editable {
+    margin-top: 7px !important;
+}
+
+dd {
+    margin-top: 10px !important;
+    margin-bottom: 10px !important;
+}

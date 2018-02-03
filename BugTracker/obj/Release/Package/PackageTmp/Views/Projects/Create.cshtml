@@ -1,0 +1,46 @@
+﻿@model BugTracker.Models.Project
+
+<link href="~/Content/form-style.css" rel="stylesheet">
+
+@{
+    ViewBag.Title = "Create";
+}
+
+<h2>Create Project</h2>
+
+@using (Html.BeginForm()) 
+{
+    @Html.AntiForgeryToken()
+    
+    <div class="form-horizontal">     
+        <hr />
+        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+        <div class="form-group">
+            @Html.LabelFor(model => model.Name, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @*@Html.TextBoxFor(model => model.Name, new { htmlAttributes = new { @class = "form-control" } })*@
+                <input data-val="true" data-val-required="The Name field is required." class = "form-control" id="Name" name="Name" type="text" value="" />
+                @Html.ValidationMessageFor(model => model.Name, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.Description, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @*@Html.TextAreaFor(model => model.Description, new { htmlAttributes = new { @class = "form-control", @rows = "4" } })*@
+                <textarea data-val="true" data-val-length="Description must be less than 200 characters" data-val-length-max="200" data-val-required="The Description field is required." class="form-control" rows="4" id="Description" name="Description"></textarea>
+                @Html.ValidationMessageFor(model => model.Description, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            <div class="col-md-offset-2 col-md-10">
+                <input type="submit" value="Create" class="btn btn-default" />
+            </div>
+        </div>
+    </div>
+}
+
+<div>
+    @Html.ActionLink("Back to Projects", "Index")
+</div>

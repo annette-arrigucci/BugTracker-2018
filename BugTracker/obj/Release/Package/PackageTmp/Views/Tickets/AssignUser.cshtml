@@ -1,0 +1,116 @@
+﻿@model BugTracker.Models.TicketAssignViewModel
+
+<link href="~/Content/form-style.css" rel="stylesheet">
+
+@{
+    ViewBag.Title = "Assign ticket to user";
+}
+
+<h2>Assign Ticket</h2>
+
+<div>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.TicketDetails.Title)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.TicketDetails.Title)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.TicketDetails.Description)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.TicketDetails.Description)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.TicketDetails.Created)
+        </dt>
+
+        <dd>
+            @TimeZoneInfo.ConvertTime(Model.TicketDetails.Created, TimeZoneInfo.Local).ToString("M/d/yy h:mm tt")
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.TicketDetails.Updated)
+        </dt>
+
+        <dd>
+            @if (Model.TicketDetails.Updated != null)
+            {
+                @TimeZoneInfo.ConvertTime((DateTimeOffset)Model.TicketDetails.Updated, TimeZoneInfo.Local).ToString("M/d/yy h:mm tt")
+            }
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.TicketDetails.ProjectTitle)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.TicketDetails.ProjectTitle)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.TicketDetails.TicketType)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.TicketDetails.TicketType)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.TicketDetails.TicketPriority)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.TicketDetails.TicketPriority)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.TicketDetails.TicketStatus)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.TicketDetails.TicketStatus)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.TicketDetails.OwnerName)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.TicketDetails.OwnerName)
+        </dd>
+
+    </dl>
+
+        @using (Html.BeginForm("AssignUser", "Tickets", new { tId = Model.TicketDetails.Id, SelectedUser = Model.SelectedUser }, FormMethod.Post))
+        {
+            @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+            @Html.AntiForgeryToken()
+            <dl class="dl-horizontal">
+                <dt>
+                    @Html.DisplayNameFor(model => model.ProjUsersList)
+                </dt>    
+                <dd>
+                    @Html.DropDownListFor(model => model.SelectedUser, Model.ProjUsersList, "-Select User-", new { @class = "form-control" })
+                    @Html.ValidationMessageFor(model => model.SelectedUser, "", new { @class = "text-danger" })
+                </dd>    
+                <dt></dt>
+                <dd>
+                    <input type="submit" value="Assign Ticket to User" class="btn btn-default" />
+                </dd>
+           </dl>
+        }
+</div>
+<p>
+    @Html.ActionLink("Back to Ticket Edit", "Edit", new {id = Model.TicketDetails.Id })
+</p>
+<p>
+    @Html.ActionLink("Back to Tickets", "Index")
+</p>
+

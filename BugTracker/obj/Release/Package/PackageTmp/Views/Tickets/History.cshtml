@@ -1,0 +1,53 @@
+﻿@model IEnumerable<BugTracker.Models.TicketHistory>
+@using BugTracker.Models;
+
+@{
+    ViewBag.Title = "History";
+}
+
+<h2>Ticket History</h2>
+<div>
+    <hr />
+    <p>Log for "<span>@ViewBag.ticketTitle</span>"</p>
+
+    @if (Model != null && Model.Any())
+    {
+        foreach (var item in Model)
+        {
+            <p>
+                <b>@TimeZoneInfo.ConvertTime(item.ChangeDate, TimeZoneInfo.FindSystemTimeZoneById("Eastern Standard Time")).ToString("M/d/yy h:mm tt")</b><br />
+                <!--Special display format only for Created entry-->
+                @if (item.PropertyChanged.Equals("Created"))
+                {
+                    var helper = new UserRolesHelper();
+                    var userName = helper.GetUserName(item.UserId);
+                    <span>Created by @userName</span><br />
+                }
+                @Html.Raw(item.Description)
+                @Html.Raw("<br>")
+                @if (!string.IsNullOrEmpty(item.UserId) && !item.PropertyChanged.Equals("Created"))
+                {
+                <!--Don't look up username if System auto-updated the ticket-->
+                    if (item.UserId.Equals("System"))
+                    {
+                        <span>Edited by @item.UserId</span><br />
+                    }
+                    else
+                    {
+                        //using the UserRolesHelper class to get the user's name
+                        var helper = new UserRolesHelper();
+                        var userName = helper.GetUserName(item.UserId);
+                        <span>Edited by @userName</span><br />
+                    }
+                }
+            </p>
+        }
+    }
+    else
+    {
+        @Html.Raw("<p>No history</p>")
+    }
+</div>
+<div>
+    @Html.ActionLink("Back to Ticket Details", "Details", "Tickets", new { id = ViewBag.ticketId }, null)
+</div>                

@@ -1,0 +1,99 @@
+﻿@model BugTracker.Models.TicketEditViewModel
+
+<link href="~/Content/form-style.css" rel="stylesheet">
+
+@{
+    ViewBag.Title = "Edit";
+}
+
+<h2>Edit Ticket</h2>
+
+@using (Html.BeginForm())
+{
+    @Html.AntiForgeryToken()
+    
+    <div class="form-horizontal">
+
+        <hr />
+        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+        @Html.HiddenFor(model => model.Id)
+        @Html.HiddenFor(model => model.Created)
+        @Html.HiddenFor(model => model.Updated)
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.Title, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.Title, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.Title, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.Description, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                <textarea data-val="true" data-val-required="Description is required" class="form-control" id="Description" name="Description" rows="4">@Model.Description</textarea>
+                @Html.ValidationMessageFor(model => model.Description, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.ProjectName, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                <p class="not-editable">
+                    @*project isn't editable after creation of ticket*@
+                    @Html.DisplayFor(model => model.ProjectName)
+                </p>
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.TicketTypes, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.DropDownListFor(model => model.SelectedType, Model.TicketTypes, new { @class = "form-control" })
+                @Html.ValidationMessageFor(model => model.SelectedType, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.TicketPriorities, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.DropDownListFor(model => model.SelectedPriority, Model.TicketPriorities, new { @class = "form-control" })
+                @Html.ValidationMessageFor(model => model.SelectedPriority, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.TicketStatuses, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.DropDownListFor(model => model.SelectedStatus, Model.TicketStatuses, new { @class = "form-control" })
+                @Html.ValidationMessageFor(model => model.SelectedStatus, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.AssignedToUserName, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                <!--don't need to check for null case, we assign string "unassigned" in controller for nulls-->
+                <p class="not-editable">
+                    @*user assignment not editable in this view - follow link to assign the user*@
+                    @Model.AssignedToUserName
+                @if (User.IsInRole("Project Manager"))
+                {
+                    @Html.Raw("&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;")
+                    @Html.ActionLink("Edit", "AssignUser", new { id = Model.Id }, new { htmlAttributes = new { @class = "form-control" } })
+                }
+                </p>
+            </div>
+        </div>
+
+        <div class="form-group">
+            <div class="col-md-offset-2 col-md-10">
+                <input type="submit" value="Save" class="btn btn-default" />
+            </div>
+        </div>
+    </div>
+}
+
+<div>
+    @Html.ActionLink("Back to Tickets", "Index")
+</div>

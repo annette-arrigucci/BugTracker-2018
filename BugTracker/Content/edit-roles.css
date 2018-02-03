@@ -1,0 +1,12 @@
+﻿.control-label {
+    padding-top: 0 !important;
+}
+
+.form-horizontal {
+    padding-top: 0 !important;
+}
+
+select {
+    width: 100% !important;
+}
+

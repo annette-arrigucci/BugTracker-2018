@@ -1,0 +1,56 @@
+﻿.btn-demo {
+    width: 100% !important;
+    margin-bottom: 15px !important; 
+}
+
+#demo-buttons{
+    margin-top: 15px !important;
+}
+
+h1 {
+    font-size: 72px !important;
+}
+
+#big-title {
+    padding: 50px !important;
+    background-color: #ffffff; 
+    margin-right: 30px;
+    border-radius: 10px;
+    min-height: 690px;
+}
+
+body {
+     background-color: #3e648d !important;
+}
+
+h2
+{
+    line-height: 1.4 !important;
+}
+
+h4
+{
+    line-height: 2 !important;
+}
+
+#sign-in {
+    background-color: #ffffff;
+    padding: 75px !important;
+    border-radius: 10px;
+    min-height: 690px;
+}
+
+#form-section {
+    margin-top: 40px;
+}
+
+#login-form  {
+    margin-top: 15px;
+}
+
+#plug-portfolio {
+    margin-top: 40px;
+    padding-top: 30px !important;
+    padding-bottom: 30px !important;
+    border: 2px solid #cccccc;
+}

@@ -1,0 +1,61 @@
+﻿@model BugTracker.Models.ProjectUserViewModel
+
+<link href="~/Content/edit-roles.css" rel="stylesheet">
+
+@{
+    ViewBag.Title = "Edit Roles";
+}
+
+<h2>Assign Users</h2>
+
+    <div class="form-horizontal">
+        <hr />
+        <div class="form-group">
+            @Html.LabelFor(model => model.ProjectName, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.DisplayFor(model => model.ProjectName, new { htmlAttributes = new { @class = "control-label form-control" } })
+                @*@Html.ValidationMessageFor(model => model.UserName, "", new { @class = "text-danger" })*@
+            </div>
+        </div>
+    @if (Model.UsersAssignedtoProject != null)//this doesn't work in preventing an empty listbox from displaying
+    {
+        using (Html.BeginForm("RemoveUsers", "ProjectUserView", new { pId = Model.ProjectId, usersToRemove = Model.UsersToRemove }, FormMethod.Post))
+        {
+            @Html.AntiForgeryToken()
+            <div class="form-group">
+                @Html.Label("Assigned Users", htmlAttributes: new { @class = "control-label col-md-2" })
+                <div class="col-md-2">
+                    @Html.ListBox("UsersToRemove", Model.UsersAssignedtoProject)
+                    @Html.ValidationMessageFor(model => model.UsersToRemove, "", new { @class = "text-danger" })
+                </div>
+                <div class="col-md-2">
+                    <input type="submit" value="Remove Selected Users" name="RemoveUsers" class="btn btn-default" />
+                </div>
+            </div>
+        }
+    }
+    @if (Model.UsersNotAssignedToProject != null) {
+        using (Html.BeginForm("AddUsers", "ProjectUserView", new { pId = Model.ProjectId, usersToAdd = Model.UsersToAdd }, FormMethod.Post))
+        {
+            @Html.AntiForgeryToken()
+            <div class="form-group">
+                @Html.Label("Users to Add", htmlAttributes: new { @class = "control-label col-md-2" })
+                <div class="col-md-2">
+                    @Html.ListBox("UsersToAdd", Model.UsersNotAssignedToProject)
+                    @Html.ValidationMessageFor(model => model.UsersToAdd, "", new { @class = "text-danger" })
+                </div>
+                <div class="col-md-2">
+                    <input type="submit" value="Add Selected Users" name="AddUsers" class="btn btn-default" />
+                </div>
+            </div>
+        }
+   }
+
+</div>
+<p>
+    @Html.ActionLink("Back to Project Details", "Details", "Projects", new { id = Model.ProjectId }, null)
+</p>
+<p>
+    @Html.ActionLink("Back to Projects", "Index", "Projects")
+</p>
+

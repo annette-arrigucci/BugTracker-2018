@@ -1,0 +1,158 @@
+﻿@model BugTracker.Models.IndexViewModel
+
+<link href="~/Content/form-style.css" rel="stylesheet">
+
+@{
+    ViewBag.Title = "Edit ";
+}
+
+<h2>Edit Profile</h2>
+
+<p class="text-success">@ViewBag.StatusMessage</p>
+<div class="row">
+    <hr />
+    @using (Html.BeginForm("EditSettings", "Manage", FormMethod.Post, new { @class = "form-horizontal", role = "form" }))
+    {
+        @Html.AntiForgeryToken()
+        @*<dl class="dl-horizontal">*@
+            @*<dt>First Name:</dt>
+            <dd>
+                @Html.EditorFor(@model => @model.FirstName, new { @class = "form-control" })
+                @*[
+                        @Html.ActionLink("Create", "SetPassword")
+                    ]*@
+            @*</dd>*@
+        <div class="form-group">
+            @*@Html.LabelFor(m => m.FirstName, new { @class = "col-md-2 control-label" })*@
+            @Html.Label("First Name", new { @class = "col-md-2 control-label" })
+            <div class="col-md-10">
+                @Html.TextBoxFor(m => m.FirstName, new { @class = "form-control" })
+            </div>
+        </div>
+
+            @*<dt>Last Name:</dt>
+            <dd>
+                @Html.EditorFor(@model => @model.LastName, new { @class = "form-control" })
+                [
+                        @Html.ActionLink("Create", "SetPassword")
+                    ]
+            </dd>*@
+
+        <div class="form-group">
+            @*@Html.LabelFor(m => m.LastName, new { @class = "col-md-2 control-label" })*@
+            @Html.Label("Last Name", new { @class = "col-md-2 control-label" })
+            <div class="col-md-10">
+                @Html.TextBoxFor(m => m.LastName, new { @class = "form-control" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(m => m.Email, new { @class = "col-md-2 control-label" })
+            <div class="col-md-10">
+                @Html.TextBoxFor(m => m.Email, new { @class = "form-control" })
+            </div>
+        </div>
+            @*<dt>Email:</dt>
+            <dd>
+                @Html.EditorFor(@model => @model.Email, new { @class = "form-control" })
+                [
+                        @Html.ActionLink("Create", "SetPassword")
+                    ]
+            </dd>*@
+            @*<dl>
+            <dt>Password:</dt>
+            <dd>*@
+
+        <div class="form-group">
+            @Html.Label("Password", new { @class = "col-md-2 control-label" })
+            <div class="col-md-10">
+               @if (Model.HasPassword)
+                {
+                @Html.ActionLink("Change password", "ChangePassword", null, new { @class = "col-md-2 control-label" })
+               }
+               else
+               {
+                @Html.ActionLink("Create", "SetPassword")
+               }
+            </div>
+        </div>
+                
+                
+            @*</dd>
+            <dt></dt>
+            <dd>*@
+                <input type="submit" class="btn btn-default col-md-2 col-md-offset-2" value="Save Changes" />
+            @*</dd>*@
+        @*</dl>*@
+    }
+    @*<dt>External Logins:</dt>
+        <dd>
+            @Model.Logins.Count [
+            @Html.ActionLink("Manage", "ManageLogins") ]
+        </dd>*@
+    @*
+        Phone Numbers can used as a second factor of verification in a two-factor authentication system.
+
+         See <a href="http://go.microsoft.com/fwlink/?LinkId=403804">this article</a>
+            for details on setting up this ASP.NET application to support two-factor authentication using SMS.
+
+         Uncomment the following block after you have set up two-factor authentication
+    *@
+    @*
+        <dt>Phone Number:</dt>
+        <dd>
+            @(Model.PhoneNumber ?? "None")
+            @if (Model.PhoneNumber != null)
+            {
+                <br />
+                <text>[&nbsp;&nbsp;@Html.ActionLink("Change", "AddPhoneNumber")&nbsp;&nbsp;]</text>
+                using (Html.BeginForm("RemovePhoneNumber", "Manage", FormMethod.Post, new { @class = "form-horizontal", role = "form" }))
+                {
+                    @Html.AntiForgeryToken()
+                    <text>[<input type="submit" value="Remove" class="btn-link" />]</text>
+                }
+            }
+            else
+            {
+                <text>[&nbsp;&nbsp;@Html.ActionLink("Add", "AddPhoneNumber")
+            }
+        </dd>
+    *@
+    @*<dt>Two-Factor Authentication:</dt>
+        <dd>
+            <p>
+                There are no two-factor authentication providers configured. See <a href="http://go.microsoft.com/fwlink/?LinkId=403804">this article</a>
+                for details on setting up this ASP.NET application to support two-factor authentication.
+            </p>*@
+    @*@if (Model.TwoFactor)
+        {
+            using (Html.BeginForm("DisableTwoFactorAuthentication", "Manage", FormMethod.Post, new { @class = "form-horizontal", role = "form" }))
+            {
+                @Html.AntiForgeryToken()
+                <text>Enabled
+                <input type="submit" value="Disable" class="btn btn-link" />
+                </text>
+            }
+        }
+        else
+        {
+            using (Html.BeginForm("EnableTwoFactorAuthentication", "Manage", FormMethod.Post, new { @class = "form-horizontal", role = "form" }))
+            {
+                @Html.AntiForgeryToken()
+                <text>Disabled
+                <input type="submit" value="Enable" class="btn btn-link" />
+                </text>
+            }
+        }*@
+    @*</dd>*@ 
+</div>
+<div class="row">
+    <br />
+    <p>
+        @Html.ActionLink("Back to Profile", "Index")
+    </p>
+    <br />
+</div>
+
+
+

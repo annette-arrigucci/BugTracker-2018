@@ -1,0 +1,36 @@
+﻿@model IEnumerable<BugTracker.Models.TicketComment>
+
+@using BugTracker.Models;
+
+<div id="show-comments">
+    <h3>Comments</h3>
+    @if (Model != null && Model.Any())
+    {
+        foreach (var item in Model)
+        {
+            <p>@Html.Raw(item.Comment)</p>
+            if (!string.IsNullOrEmpty(item.UserId))
+            {
+                //using the UserRolesHelper class to get the user's name
+                var helper = new UserRolesHelper();
+                var userName = helper.GetUserName(item.UserId);
+                <b>Posted by @userName</b>
+            }
+            <br />
+            <b>@TimeZoneInfo.ConvertTime(item.Created, TimeZoneInfo.FindSystemTimeZoneById("Eastern Standard Time")).ToString("M/d/yy h:mm tt")</b>
+            <p>
+                @if (User.IsInRole("Moderator") || User.IsInRole("Admin"))
+                {
+                    @Html.ActionLink("Edit", "Edit", "TicketComments", new { id = item.Id }, null)
+                    @Html.Raw(" | ")
+                    @Html.ActionLink("Delete", "Delete", "TicketComments", new { id = item.Id }, null)
+                }
+            </p>
+            <br />
+        }
+    }
+    else
+    {
+        @Html.Raw("<p>No comments</p><br /><br />")
+    }
+</div>

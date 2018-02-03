@@ -1,0 +1,99 @@
+﻿@model BugTracker.Models.Project
+@using BugTracker.Models
+@using Microsoft.AspNet.Identity
+
+@{
+    ViewBag.Title = "Details";
+}
+
+<link href="~/Content/form-style.css" rel="stylesheet">
+<link rel="stylesheet" href="~/DataTables/datatables.min.css" />
+
+<h2>Project Details</h2>
+
+<div>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.Name)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Name)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Description)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Description)
+        </dd>
+
+    </dl>
+</div>
+    @if (User.IsInRole("Admin") || User.IsInRole("Project Manager"))
+    {
+        @Html.ActionLink("Edit Project Details", "Edit", new { id = Model.Id })
+    }
+    <br /><br />
+    @{ 
+        var myHelper = new ProjectUserHelper();
+        var userList = myHelper.UsersInProject(Model.Id);
+        var userInfoList = myHelper.getUserInfo(userList);
+        var projectTicketList = new List<Ticket>();
+        //if user is an Admin or PM, show all the tickets in the project
+        if (User.IsInRole("Admin") || User.IsInRole("Project Manager"))
+        {
+           projectTicketList = myHelper.getTicketsinProject(Model.Id);
+        }
+        //otherwise, get only the tickets the user is assigned to as a developer or has created
+        else
+        {
+           if (User.IsInRole("Developer") || User.IsInRole("Submitter"))
+           {
+               var projTickets = myHelper.getTicketsinProject(Model.Id);
+               foreach (var ticket in projTickets)
+               {
+                  //if the user owns the ticket, add it to their list for this project
+                  if(ticket.OwnerUserId.Equals(User.Identity.GetUserId()))
+                  {
+                      projectTicketList.Add(ticket);
+                  }
+                  //otherwise, if it's assigned, check if it is assigned to this user
+                  else
+                  {
+                      if(!string.IsNullOrEmpty(ticket.AssignedToUserId))
+                      {
+                          if(ticket.AssignedToUserId.Equals(User.Identity.GetUserId()))
+                          {
+                             projectTicketList.Add(ticket);
+                          }
+                       }
+                   }
+                }
+             }
+          }
+    }
+                @Html.Partial("_ShowProjectUsers", userInfoList, new ViewDataDictionary { { "projectId", Model.Id } })
+
+   
+        <br /><br />
+        @Html.Partial("_ShowProjectTickets", projectTicketList, new ViewDataDictionary { { "projectId", Model.Id } })
+    <br /><br />
+
+<p>
+    @Html.ActionLink("Back to Projects", "Index")
+</p>
+
+@section Scripts
+{
+    <script type="text/javascript" src="~/DataTables/datatables.js"></script>
+    <script>
+        $(document).ready(function () {
+            $('#project-tickets-table').DataTable({
+                "order": [[1, 'desc']],
+            });
+        });
+    </script>
+}

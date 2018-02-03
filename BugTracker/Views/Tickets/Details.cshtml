@@ -1,0 +1,132 @@
+﻿@model BugTracker.Models.TicketDetailsViewModel
+
+<link href="~/Content/form-style.css" rel="stylesheet">
+
+@{
+    ViewBag.Title = "Ticket Details";
+}
+
+<h2>Ticket Details</h2>
+
+<div>
+    <hr />
+    <div class="row">
+        <div class="col-lg-6">
+            <dl class="dl-horizontal">
+                <dt>
+                    @Html.DisplayNameFor(model => model.Title)
+                </dt>
+                <dd>
+                    @Html.DisplayFor(model => model.Title)
+                </dd>
+                <dt>
+                    @Html.DisplayNameFor(model => model.Description)
+                </dt>
+                <dd>
+                    @Html.DisplayFor(model => model.Description)
+                </dd>
+
+                <dt>
+                    @Html.DisplayNameFor(model => model.ProjectTitle)
+                </dt>
+                <dd>
+                    @Html.DisplayFor(model => model.ProjectTitle)
+                </dd>
+
+                <dt>
+                    @Html.DisplayNameFor(model => model.Created)
+                </dt>
+                <dd>
+                    @TimeZoneInfo.ConvertTime(Model.Created, TimeZoneInfo.FindSystemTimeZoneById("Eastern Standard Time")).ToString("M/d/yy h:mm tt")
+                </dd>
+                <dt>
+                    @Html.DisplayNameFor(model => model.Updated)
+                </dt>
+                <dd>
+                    @if (Model.Updated != null)
+                    {
+                        @TimeZoneInfo.ConvertTime((DateTimeOffset)Model.Updated, TimeZoneInfo.FindSystemTimeZoneById("Eastern Standard Time")).ToString("M/d/yy h:mm tt")
+                    }
+                </dd>
+                
+                <dt>
+                    @Html.DisplayNameFor(model => model.AssignedToUserName)
+                </dt>
+                <dd>
+                    @Html.DisplayFor(model => model.AssignedToUserName)
+                    @if (User.IsInRole("Project Manager"))
+                    {
+                        @Html.Raw("&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;")
+                        @Html.ActionLink("Edit", "AssignUser", new { id = Model.Id }, new { htmlAttributes = new { @class = "form-control" } })
+                    }
+                </dd>
+                <dt>
+                    @Html.DisplayName("Attachments")
+                </dt>
+                <dd>
+                    @Html.Partial("_ShowAttachments", (IEnumerable<BugTracker.Models.TicketAttachment>)ViewBag.Attachments)
+                    @Html.ActionLink("Add Attachment", "Create", "TicketAttachments", new { ticketId = Model.Id }, new { @class = "btn btn-default" })
+                </dd>
+                
+                <dt></dt>
+                <dd>
+                    <br />
+                    @Html.ActionLink("Edit Ticket", "Edit", new { id = Model.Id }, new { @class = "btn btn-default" })
+                </dd>
+            </dl>
+        </div>
+        <div class="col-lg-6">
+            <dl class="dl-horizontal">
+                <dt>
+                    @Html.DisplayNameFor(model => model.TicketPriority)
+                </dt>
+                <dd>
+                    @*@Html.DisplayFor(model => model.TicketPriority)*@
+                    @if (Model.TicketPriority.Equals("Critical"))
+                    {
+                        <span class="label label-danger">Critical</span>
+                    }
+                    else if (Model.TicketPriority.Equals("High"))
+                    {
+                        <span class="label label-warning">High</span>
+                    }
+                    else if (Model.TicketPriority.Equals("Medium"))
+                    {
+                        <span class="label label-primary">Medium</span>
+                    }
+                    else if (Model.TicketPriority.Equals("Low"))
+                    {
+                        <span class="label label-default">Low</span>
+                    }
+                </dd>
+
+                <dt>
+                    @Html.DisplayNameFor(model => model.TicketType)
+                </dt>
+                <dd>
+                    @Html.DisplayFor(model => model.TicketType)
+                </dd>
+                
+                <dt>
+                    @Html.DisplayNameFor(model => model.TicketStatus)
+                </dt>
+                <dd>
+                    @Html.DisplayFor(model => model.TicketStatus)
+                </dd>
+                <dt>
+                    @Html.DisplayNameFor(model => model.OwnerName)
+                </dt>
+                <dd>
+                    @Html.DisplayFor(model => model.OwnerName)
+                </dd>
+                <dt></dt>
+                <dd>@Html.ActionLink("Ticket History", "History", new { id = Model.Id }, null)</dd>          
+            </dl>
+          </div>
+        </div>
+    @Html.ActionLink("Back to Tickets", "Index")
+    
+</div>
+@Html.Partial("_ShowComments", (IEnumerable<BugTracker.Models.TicketComment>)ViewBag.Comments)
+@Html.ActionLink("Add Comment", "Create", "TicketComments", new { ticketId = Model.Id }, new { @class = "btn btn-default" } )  
+
